@@ -1017,6 +1017,11 @@ public:
     }
 
     //-------------------
+    // Зело мешает
+    // Нужно сделать конкретные реализации
+    
+    #if 1
+
     template<typename T>
     SimpleFormatter& operator<<( T t )
     {
@@ -1024,6 +1029,29 @@ public:
         formatValue(t);
         return *this;
     }
+    
+    #else
+
+    #define UMBA_SIMPLE_FORMATTER_IMPLEMENT_INSERTER_OPERATOR(typeName) \
+        SimpleFormatter& operator<<( typeName t )                       \
+        {                                                               \
+            SimpleFormatterOutputSentry sentry(*this);                  \
+            formatValue(t);                                             \
+            return *this;                                               \
+        }
+
+    UMBA_SIMPLE_FORMATTER_IMPLEMENT_INSERTER_OPERATOR(char)
+    UMBA_SIMPLE_FORMATTER_IMPLEMENT_INSERTER_OPERATOR(signed char)
+    UMBA_SIMPLE_FORMATTER_IMPLEMENT_INSERTER_OPERATOR(unsigned char)
+
+    UMBA_SIMPLE_FORMATTER_IMPLEMENT_INSERTER_OPERATOR(short int)
+    UMBA_SIMPLE_FORMATTER_IMPLEMENT_INSERTER_OPERATOR(unsigned short int)
+
+    UMBA_SIMPLE_FORMATTER_IMPLEMENT_INSERTER_OPERATOR(int)
+    UMBA_SIMPLE_FORMATTER_IMPLEMENT_INSERTER_OPERATOR(unsigned int)
+
+    #endif
+
 
     SimpleFormatter& operator<<( const char* t )
     {
