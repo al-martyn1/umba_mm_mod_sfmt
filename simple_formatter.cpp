@@ -9,6 +9,7 @@ namespace umba
 {
 
 //-----------------------------------------------------------------------------
+#include "umba/warnings/push_disable_this_used_in_base_member_initializer_list.h"
 UMBA_SIMPLE_FORMATTER_INLINE_FUNCTION
 SimpleFormatter::SimpleFormatter(ICharWriter *charWriter)
     : m_charWriter(charWriter)
@@ -17,8 +18,10 @@ SimpleFormatter::SimpleFormatter(ICharWriter *charWriter)
     , m_disableOutput(false)
 {
 }
+#include "umba/warnings/pop.h"
 
 //-----------------------------------------------------------------------------
+#include "umba/warnings/push_disable_this_used_in_base_member_initializer_list.h"
 UMBA_SIMPLE_FORMATTER_INLINE_FUNCTION
 SimpleFormatter::SimpleFormatter()
     : m_charWriter(0)
@@ -27,6 +30,7 @@ SimpleFormatter::SimpleFormatter()
     , m_disableOutput(false)
 {
 }
+#include "umba/warnings/pop.h"
 
 //-----------------------------------------------------------------------------
 UMBA_SIMPLE_FORMATTER_INLINE_FUNCTION
@@ -200,7 +204,7 @@ char SimpleFormatter::fill( char c )
 {
     int res = m_formatState.fill;
     m_formatState.fill = c;
-    return res;
+    return (char)res;
 }
 
 //-----------------------------------------------------------------------------

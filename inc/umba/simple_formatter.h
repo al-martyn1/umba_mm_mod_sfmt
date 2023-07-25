@@ -50,6 +50,8 @@ size_t formatIntImpl( IntType val, BaseType base, const char *digits, char *pBuf
                     , std::false_type signedIntType
                     )
 {
+    UMBA_USED(signedIntType);
+
     if (groupSize<1)
         groupSize = 0;
 
@@ -65,8 +67,8 @@ size_t formatIntImpl( IntType val, BaseType base, const char *digits, char *pBuf
             grpSepCounter++;
         }
         
-        IntType d = val % (IntType)base;
-        *pBufEnd++ = digits[d];
+        IntType d = (IntType)(val % (IntType)base);
+        *pBufEnd++ = digits[(unsigned)d];
         val /= (IntType)base;
         //*pBufEnd = 0; // tmp for debug
 
@@ -111,6 +113,7 @@ size_t formatIntImpl( IntType val, BaseType base, const char *digits, char *pBuf
 {
     UMBA_USED(width);
     UMBA_USED(fillCh);
+    UMBA_USED(signedIntType);
 
     if (groupSize<1)
         groupSize = 0;
@@ -492,7 +495,7 @@ public:
             prefix = getUnsignedPrefix( fmtState.flags, fmtState.flags&uppercasebase ? true : false );
         }
 
-        int prefixLen = std::strlen(prefix);
+        int prefixLen = (int)std::strlen(prefix);
 
         int groupSize = fmtBase==10 ? fmtState.decGroupSize : fmtState.groupSize;
         char groupSep = fmtBase==10 ? fmtState.decGroupSep : fmtState.groupSep;
@@ -515,23 +518,23 @@ public:
            {
             case left:
                  if (prefix && prefixLen)
-                     writeBuf((const uint8_t*)prefix, prefixLen);
-                 writeBuf((const uint8_t*)numBuf, numStrLen);
+                     writeBuf((const uint8_t*)prefix, (unsigned)prefixLen);
+                 writeBuf((const uint8_t*)numBuf, (unsigned)numStrLen);
                  makeFill( fillW, fmtState.fill );
                  break;
 
             case right:
                  makeFill( fillW, fmtState.fill );
                  if (prefix && prefixLen)
-                     writeBuf((const uint8_t*)prefix, prefixLen);
-                 writeBuf((const uint8_t*)numBuf, numStrLen);
+                     writeBuf((const uint8_t*)prefix, (unsigned)prefixLen);
+                 writeBuf((const uint8_t*)numBuf, (unsigned)numStrLen);
                  break;
 
             default: // internal
                  if (prefix && prefixLen)
-                     writeBuf((const uint8_t*)prefix, prefixLen);
+                     writeBuf((const uint8_t*)prefix, (unsigned)prefixLen);
                  makeFill( fillW, fmtState.fill );
-                 writeBuf((const uint8_t*)numBuf, numStrLen);
+                 writeBuf((const uint8_t*)numBuf, (unsigned)numStrLen);
            }
     }
 
@@ -649,7 +652,7 @@ public:
             case left:
                  if (showSign)
                      writeBuf(&sign, 1);
-                 writeBuf((const uint8_t*)numBuf, numStrLen);
+                 writeBuf((const uint8_t*)numBuf, (unsigned)numStrLen);
                  makeFill( fillW, m_formatState.fill );
                  break;
 
@@ -657,14 +660,14 @@ public:
                  makeFill( fillW, m_formatState.fill );
                  if (showSign)
                      writeBuf(&sign, 1);
-                 writeBuf((const uint8_t*)numBuf, numStrLen);
+                 writeBuf((const uint8_t*)numBuf, (unsigned)numStrLen);
                  break;
 
             default: // internal
                  if (showSign)
                      writeBuf(&sign, 1);
                  makeFill( fillW, m_formatState.fill );
-                 writeBuf((const uint8_t*)numBuf, numStrLen);
+                 writeBuf((const uint8_t*)numBuf, (unsigned)numStrLen);
            }
     }
 
@@ -709,7 +712,7 @@ public:
                 prec = 12;
 
             // 18 446 744 073 709 551 616 max uint64_t
-            uint64_t fixedPointVal = ((long double)val) * std::pow( 10.0L, prec+1 );
+            uint64_t fixedPointVal = (uint64_t)(((long double)val) * std::pow( 10.0L, prec+1 ));
             uint8_t fixedPointDigits[ format_utils::integral_max_bits / 3 + 1 ];
             std::memset( (void*)fixedPointDigits, (int)0, sizeof(fixedPointDigits) );
 
@@ -723,8 +726,8 @@ public:
                 fixedPointVal /= 10;
             }
 
-            if (numDigits<(prec+1))
-                numDigits = prec+1;
+            if (numDigits<(std::size_t)(prec+1))
+                numDigits = (std::size_t)(prec+1);
 
             // Округляем
             if (fixedPointDigits[0]>4)
@@ -745,7 +748,7 @@ public:
 
             fixedPointDigits[0] = 0;
             size_t fractionPartBeginIdx  = 1;
-            size_t intPartBeginIdx = prec + 1;
+            size_t intPartBeginIdx = (std::size_t)(prec + 1);
 
             if (!(m_formatState.flags&fixed))
             {
@@ -857,7 +860,7 @@ public:
             case left:
                  if (showSign)
                      writeBuf(&sign, 1);
-                 writeBuf((const uint8_t*)numBuf, numStrLen);
+                 writeBuf((const uint8_t*)numBuf, (unsigned)numStrLen);
                  makeFill( fillW, m_formatState.fill );
                  break;
 
@@ -865,14 +868,14 @@ public:
                  makeFill( fillW, m_formatState.fill );
                  if (showSign)
                      writeBuf(&sign, 1);
-                 writeBuf((const uint8_t*)numBuf, numStrLen);
+                 writeBuf((const uint8_t*)numBuf, (unsigned)numStrLen);
                  break;
 
             default: // internal
                  if (showSign)
                      writeBuf(&sign, 1);
                  makeFill( fillW, m_formatState.fill );
-                 writeBuf((const uint8_t*)numBuf, numStrLen);
+                 writeBuf((const uint8_t*)numBuf, (unsigned)numStrLen);
            }
     }
 /*
@@ -953,7 +956,7 @@ public:
     {
         int strLen = 0;
         if (str)
-            strLen = std::strlen(str);
+            strLen = (int)std::strlen(str);
 
         int fillW = m_formatState.width - strLen;
 
@@ -962,14 +965,14 @@ public:
         if (align==left)
         {
              if (strLen)
-                 writeBuf((const uint8_t*)str, strLen);
+                 writeBuf((const uint8_t*)str, (std::size_t)strLen);
              makeFill( fillW, m_formatState.fill );
         }
         else // right, internal 
         {
              makeFill( fillW, m_formatState.fill );
              if (strLen)
-                 writeBuf((const uint8_t*)str, strLen);
+                 writeBuf((const uint8_t*)str, (std::size_t)strLen);
         }
     }
 
@@ -1005,7 +1008,7 @@ public:
                                      , "false", "true"
                                      , "FALSE", "TRUE"
                                      };
-        unsigned idx = b ? 1 : 0;
+        unsigned idx = (unsigned)(b ? 1 : 0);
         if (m_formatState.flags&boolalpha)
         {
             idx += 2;
@@ -1804,14 +1807,14 @@ UMBA_SIMPLE_FORMATTER_END_IMPLEMENT_INT_MANIP(setw)
 
 UMBA_SIMPLE_FORMATTER_BEGIN_IMPLEMENT_INT_MANIP(groupsep)
 {
-    fmt.groupsep( i );
+    fmt.groupsep( (char)i );
     return fmt;
 }
 UMBA_SIMPLE_FORMATTER_END_IMPLEMENT_INT_MANIP(groupsep)
 
 UMBA_SIMPLE_FORMATTER_BEGIN_IMPLEMENT_INT_MANIP(decgroupsep)
 {
-    fmt.decgroupsep( i );
+    fmt.decgroupsep( (char)i );
     return fmt;
 }
 UMBA_SIMPLE_FORMATTER_END_IMPLEMENT_INT_MANIP(decgroupsep)
