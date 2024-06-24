@@ -24,10 +24,10 @@ set(MODULE_ROOT "${CMAKE_CURRENT_LIST_DIR}")
 
 file(GLOB sources "${MODULE_ROOT}/*.cpp")
 list(FILTER sources EXCLUDE REGEX ".*simple_formatter\\.cpp$")
-source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} PREFIX "${PROJECT_NAME}/Sources" FILES ${sources})
+source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} PREFIX "Sources" FILES ${sources})
 
 file(GLOB_RECURSE headers "${MODULE_ROOT}/*.h")
-source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} PREFIX "${PROJECT_NAME}/Headers" FILES ${headers})
+source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} PREFIX "Headers" FILES ${headers})
 
 
 add_library(${PROJECT_NAME} ${sources} ${headers})
