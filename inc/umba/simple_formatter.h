@@ -237,18 +237,20 @@ private:
 enum class ColoringLevel
 {
                        // Цвет по умолчанию
-    emergency     = 0, // черный текст на красном фоне
-    alert         = 1, // черный текст на желтом фоне
-    critical      = 2, // черный текст на желтом фоне
-    error         = 3, // красный текст на дефолтном фоне
-    warning       = 4, // ярко красный (розовый) текст на дефолтном фоне
-    notice        = 5, // ярко желтый текст на дефолтном фоне
-    info          = 6, // ярко-белый на дефолтном фоне
-    debug         = 7, // голубой на дефолтном фоне
-    good          = 8, // светло-зеленый на дефолтном фоне
-    caption       = 9, // магента на дефолтном фоне
-    normal        = 10,  // дефолтный цвет
-    num_levels    = 11
+    emergency          = 0, // черный текст на красном фоне
+    alert              = 1, // черный текст на желтом фоне
+    critical           = 2, // черный текст на желтом фоне
+    error              = 3, // красный текст на дефолтном фоне
+    warning            = 4, // ярко красный (розовый) текст на дефолтном фоне
+    notice             = 5, // ярко желтый текст на дефолтном фоне
+    info               = 6, // ярко-белый на дефолтном фоне
+    debug              = 7, // голубой на дефолтном фоне
+    good               = 8, // светло-зеленый на дефолтном фоне
+    caption            = 9, // магента на дефолтном фоне
+    good_but_notice    = 10, // магента на дефолтном фоне
+    good_but_warning   = 11, // ярко красный (розовый) текст на дефолтном фоне
+    normal             = 12,  // дефолтный цвет
+    num_levels //    = 12
 };
 
 
@@ -1332,7 +1334,9 @@ private:
     , UMBA_TERM_COLORS_MAKE_COMPOSITE( umba::term::colors::blue         , umba::term::colors::color_default, true  ,  false,  false ) // debug         = 7, // голубой на дефолтном фоне                     
     , UMBA_TERM_COLORS_MAKE_COMPOSITE( umba::term::colors::green        , umba::term::colors::color_default, true  ,  false,  false ) // good          = 8, // светло-зеленый на дефолтном фоне              
     , UMBA_TERM_COLORS_MAKE_COMPOSITE( umba::term::colors::magenta      , umba::term::colors::color_default, true  ,  false,  false ) // caption       = 9, // магента на дефолтном фоне              
-    , UMBA_TERM_COLORS_MAKE_COMPOSITE( umba::term::colors::color_default, umba::term::colors::color_default, false ,  false,  false ) // normal        = 10, // дефолтный цвет                               
+    , UMBA_TERM_COLORS_MAKE_COMPOSITE( umba::term::colors::magenta      , umba::term::colors::color_default, true  ,  false,  false ) // good_but_notice = 10, // магента на дефолтном фоне              
+    , UMBA_TERM_COLORS_MAKE_COMPOSITE( umba::term::colors::red          , umba::term::colors::color_default, true  ,  false,  false ) // good_but_warning = 11, // ярко красный (розовый) текст на дефолтном фоне
+    , UMBA_TERM_COLORS_MAKE_COMPOSITE( umba::term::colors::color_default, umba::term::colors::color_default, false ,  false,  false ) // normal        = 12, // дефолтный цвет                               
     };
 
 
@@ -1601,6 +1605,22 @@ inline
 SimpleFormatter& caption( SimpleFormatter& fmt )
 {
     fmt.coloring( ColoringLevel::caption );
+    return fmt;
+}
+
+//-----------------------------------------------------------------------------
+inline
+SimpleFormatter& good_but_notice( SimpleFormatter& fmt )
+{
+    fmt.coloring( ColoringLevel::good_but_notice );
+    return fmt;
+}
+
+//-----------------------------------------------------------------------------
+inline
+SimpleFormatter& good_but_warning( SimpleFormatter& fmt )
+{
+    fmt.coloring( ColoringLevel::good_but_warning );
     return fmt;
 }
 
