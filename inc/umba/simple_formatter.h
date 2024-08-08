@@ -1210,15 +1210,28 @@ public:
         {
             m_pFormatter->m_charWriter->setTermColors(clr);
         }
+        
+        virtual void terminalMoveToAbs0()                        override { m_pFormatter->m_charWriter->terminalMoveToAbs0()               ; }      
+        virtual void terminalMoveRelative(int direction, int n)  override { m_pFormatter->m_charWriter->terminalMoveRelative(direction, n) ; }
+        virtual void terminalMoveToNextLine(int n)               override { m_pFormatter->m_charWriter->terminalMoveToNextLine(n)          ; }  
+        virtual void terminalMoveToPrevLine(int n)               override { m_pFormatter->m_charWriter->terminalMoveToPrevLine(n)          ; }  
+        virtual void terminalMoveToAbsCol(int n)                 override { m_pFormatter->m_charWriter->terminalMoveToAbsCol(n)            ; }  
+        virtual void terminalMoveToLineStart()                   override { m_pFormatter->m_charWriter->terminalMoveToLineStart()          ; }      
+        virtual void terminalMoveToAbsPos( int x, int y )        override { m_pFormatter->m_charWriter->terminalMoveToAbsPos(x, y)         ; }
+        virtual void terminalClearScreenEnd()                    override { m_pFormatter->m_charWriter->terminalClearScreenEnd()           ; }      
+        virtual void terminalClearScreen()                       override { m_pFormatter->m_charWriter->terminalClearScreen()              ; }      
+        virtual void terminalClearLine()                         override { m_pFormatter->m_charWriter->terminalClearLine()                ; }      
+        virtual void terminalClearLineEnd()                      override { m_pFormatter->m_charWriter->terminalClearLineEnd()             ; }      
 
-        virtual void terminalMove2Abs0()              override { m_pFormatter->m_charWriter->terminalMove2Abs0();  }
-        virtual void terminalMove2Down()              override { m_pFormatter->m_charWriter->terminalMove2Down();  }
-        virtual void terminalMove2Line0()             override { m_pFormatter->m_charWriter->terminalMove2Line0(); }
-        virtual void terminalMove2LinePos( int pos )  override { m_pFormatter->m_charWriter->terminalMove2LinePos( pos ); }
-        virtual void terminalMove2Pos( int x, int y ) override { m_pFormatter->m_charWriter->terminalMove2Pos( x, y ); }
 
-        virtual void terminalClearLine( int maxPosToClear=-1 ) override { m_pFormatter->m_charWriter->terminalClearLine(maxPosToClear); }
-        virtual void terminalClearRemaining(int maxLines = -1) override { m_pFormatter->m_charWriter->terminalClearRemaining(maxLines); }
+        //virtual void terminalMove2Abs0()              override { m_pFormatter->m_charWriter->terminalMove2Abs0();  }
+        //virtual void terminalMove2Down()              override { m_pFormatter->m_charWriter->terminalMove2Down();  }
+        //virtual void terminalMove2Line0()             override { m_pFormatter->m_charWriter->terminalMove2Line0(); }
+        //virtual void terminalMove2LinePos( int pos )  override { m_pFormatter->m_charWriter->terminalMove2LinePos( pos ); }
+        //virtual void terminalMove2Pos( int x, int y ) override { m_pFormatter->m_charWriter->terminalMove2Pos( x, y ); }
+
+        //virtual void terminalClearLine( int maxPosToClear=-1 ) override { m_pFormatter->m_charWriter->terminalClearLine(maxPosToClear); }
+        //virtual void terminalClearRemaining(int maxLines = -1) override { m_pFormatter->m_charWriter->terminalClearRemaining(maxLines); }
 
         virtual void terminalSetSpinnerMode( bool m ) override { m_pFormatter->m_charWriter->terminalSetSpinnerMode(m); }
         virtual void terminalSetCaret( int csz ) override { m_pFormatter->m_charWriter->terminalSetCaret( csz ); }
@@ -1883,64 +1896,120 @@ UMBA_SIMPLE_FORMATTER_END_IMPLEMENT_INT_MANIP(decpoint)
 namespace term {
 
 
-//-----------------------------------------------------------------------------
-inline
-SimpleFormatter& move2abs0( SimpleFormatter& fmt )
-{
-    fmt.getCharWritter()->terminalMove2Abs0();
-    return fmt;
-}
+
 
 //-----------------------------------------------------------------------------
 inline
-SimpleFormatter& move2down( SimpleFormatter& fmt )
+SimpleFormatter& mv_abs0( SimpleFormatter& fmt )
 {
-    fmt.getCharWritter()->terminalMove2Down();
+    fmt.getCharWritter()->terminalMoveToAbs0();
     return fmt;
 }
 
 //-----------------------------------------------------------------------------
-inline
-SimpleFormatter& move2line0( SimpleFormatter& fmt )
+UMBA_SIMPLE_FORMATTER_BEGIN_IMPLEMENT_INT_MANIP(mv_down)
 {
-    fmt.getCharWritter()->terminalMove2Line0();
+    fmt.getCharWritter()->terminalMoveToNextLine(i);
+    return fmt;
+}
+UMBA_SIMPLE_FORMATTER_END_IMPLEMENT_INT_MANIP(mv_down)
+
+UMBA_SIMPLE_FORMATTER_BEGIN_IMPLEMENT_INT_MANIP(mv_next)
+{
+    fmt.getCharWritter()->terminalMoveToNextLine(i);
+    return fmt;
+}
+UMBA_SIMPLE_FORMATTER_END_IMPLEMENT_INT_MANIP(mv_next)
+
+//-----------------------------------------------------------------------------
+UMBA_SIMPLE_FORMATTER_BEGIN_IMPLEMENT_INT_MANIP(mv_up)
+{
+    fmt.getCharWritter()->terminalMoveToPrevLine(i);
+    return fmt;
+}
+UMBA_SIMPLE_FORMATTER_END_IMPLEMENT_INT_MANIP(mv_up)
+
+UMBA_SIMPLE_FORMATTER_BEGIN_IMPLEMENT_INT_MANIP(mv_prev)
+{
+    fmt.getCharWritter()->terminalMoveToPrevLine(i);
+    return fmt;
+}
+UMBA_SIMPLE_FORMATTER_END_IMPLEMENT_INT_MANIP(mv_prev)
+
+
+//-----------------------------------------------------------------------------
+static constexpr const int mv_dir_up    = 0;
+static constexpr const int mv_dir_down  = 1;
+
+static constexpr const int mv_dir_fwd   = 2;
+static constexpr const int mv_dir_left  = 2;
+
+static constexpr const int mv_dir_rew   = 3;
+static constexpr const int mv_dir_right = 3;
+static constexpr const int mv_dir_back  = 3;
+
+UMBA_SIMPLE_FORMATTER_BEGIN_IMPLEMENT_INT2_MANIP(mv_rel)
+{
+    fmt.getCharWritter()->terminalMoveRelative(i1,i2);
+    return fmt;
+}
+UMBA_SIMPLE_FORMATTER_END_IMPLEMENT_INT2_MANIP(mv_rel)
+
+//-----------------------------------------------------------------------------
+UMBA_SIMPLE_FORMATTER_BEGIN_IMPLEMENT_INT_MANIP(mv_abs_col)
+{
+    fmt.getCharWritter()->terminalMoveToAbsCol(i);
+    return fmt;
+}
+UMBA_SIMPLE_FORMATTER_END_IMPLEMENT_INT_MANIP(mv_abs_col)
+
+//-----------------------------------------------------------------------------
+//UMBA_SIMPLE_FORMATTER_BEGIN_IMPLEMENT_INT_MANIP(mv_ln_start)
+inline SimpleFormatter& mv_ln_start( SimpleFormatter& fmt )
+{
+    fmt.getCharWritter()->terminalMoveToLineStart();
+    return fmt;
+}
+//UMBA_SIMPLE_FORMATTER_END_IMPLEMENT_INT_MANIP(mv_ln_start)
+
+//-----------------------------------------------------------------------------
+UMBA_SIMPLE_FORMATTER_BEGIN_IMPLEMENT_INT2_MANIP(mv_abs_pos)
+{
+    fmt.getCharWritter()->terminalMoveToAbsPos(i1,i2);
+    return fmt;
+}
+UMBA_SIMPLE_FORMATTER_END_IMPLEMENT_INT2_MANIP(mv_abs_pos)
+
+//-----------------------------------------------------------------------------
+inline SimpleFormatter& clr_scr_end( SimpleFormatter& fmt )
+{
+    fmt.getCharWritter()->terminalClearScreenEnd();
     return fmt;
 }
 
 //-----------------------------------------------------------------------------
-inline
-SimpleFormatter& clear_screen( SimpleFormatter& fmt )
+inline SimpleFormatter& clr_scr( SimpleFormatter& fmt )
 {
-    fmt.getCharWritter()->terminalMove2Abs0();
-    fmt.getCharWritter()->terminalClearRemaining( -1 ); // Очищаем весь экран, и переустанавливаем точку вывода в самое начало
+    fmt.getCharWritter()->terminalClearScreen();
     return fmt;
 }
 
 //-----------------------------------------------------------------------------
-UMBA_SIMPLE_FORMATTER_BEGIN_IMPLEMENT_INT_MANIP(clear) // Очищаем нужное количество строк, считая текущую. Текущую очищаем от текущей позиции. Если 0 - то ничего не очищаем
+inline SimpleFormatter& clr_ln_end( SimpleFormatter& fmt )
 {
-    if (i<0)
-        fmt.getCharWritter()->terminalClearRemaining( -1 );
-    else if (i==0)
-        return fmt;
-    else
-        fmt.getCharWritter()->terminalClearRemaining( i-1 );
-    
+    fmt.getCharWritter()->terminalClearLineEnd();
     return fmt;
 }
-UMBA_SIMPLE_FORMATTER_END_IMPLEMENT_INT_MANIP(clear)
 
 //-----------------------------------------------------------------------------
-UMBA_SIMPLE_FORMATTER_BEGIN_IMPLEMENT_INT_MANIP(clear_line) // Очищаем N позиций в строке, начиная с текущей. Если <0 - очищаем до конца
+inline SimpleFormatter& clr_ln( SimpleFormatter& fmt )
 {
-    fmt.getCharWritter()->terminalClearLine( i );
+    fmt.getCharWritter()->terminalClearLine();
     return fmt;
 }
-UMBA_SIMPLE_FORMATTER_END_IMPLEMENT_INT_MANIP(clear_line)
 
 //-----------------------------------------------------------------------------
-inline
-SimpleFormatter& spinner_endl( SimpleFormatter& fmt )
+inline SimpleFormatter& spinner_endl( SimpleFormatter& fmt )
 {
     if (!fmt.getCharWritter()->isTerminal())
     {
@@ -1949,7 +2018,9 @@ SimpleFormatter& spinner_endl( SimpleFormatter& fmt )
     else
     {
         fmt.getCharWritter()->terminalSetSpinnerMode( false );
-        fmt.getCharWritter()->terminalClearRemaining( 2 ); // Текущую и две строки ниже очищаем от возможного слишком длинного текста. Если больше - будет люто тормозить
+        //fmt.getCharWritter()->terminalClearRemaining( 2 ); // Текущую и две строки ниже очищаем от возможного слишком длинного текста. Если больше - будет люто тормозить
+        fmt.getCharWritter()->terminalClearScreenEnd();
+        
         //fmt.getCharWritter()->terminalClearLineRemaining();
     }
 
@@ -1985,22 +2056,6 @@ SimpleFormatter& spinner_endl( SimpleFormatter& fmt )
 }
 
 //-----------------------------------------------------------------------------
-UMBA_SIMPLE_FORMATTER_BEGIN_IMPLEMENT_INT_MANIP(move2lpos)
-{
-    fmt.getCharWritter()->terminalMove2LinePos(i);
-    return fmt;
-}
-UMBA_SIMPLE_FORMATTER_END_IMPLEMENT_INT_MANIP(move2lpos)
-
-//-----------------------------------------------------------------------------
-UMBA_SIMPLE_FORMATTER_BEGIN_IMPLEMENT_INT2_MANIP(move2pos)
-{
-    fmt.getCharWritter()->terminalMove2Pos(i1,i2);
-    return fmt;
-}
-UMBA_SIMPLE_FORMATTER_END_IMPLEMENT_INT2_MANIP(move2pos)
-
-//-----------------------------------------------------------------------------
 UMBA_SIMPLE_FORMATTER_BEGIN_IMPLEMENT_INT2_MANIP(spinner)
 {
     static char spinnerChars[] = { '-', '\\', '|', '/' };
@@ -2016,7 +2071,8 @@ UMBA_SIMPLE_FORMATTER_BEGIN_IMPLEMENT_INT2_MANIP(spinner)
     str[0] = spinnerChars[i1%4];
 
     fmt.getCharWritter()->terminalSetSpinnerMode( true );
-    fmt.getCharWritter()->terminalMove2LinePos(i2);
+    // fmt.getCharWritter()->terminalMove2LinePos(i2);
+    fmt.getCharWritter()->terminalMoveToAbsCol(i2);
     fmt << (const char*)&str[0];
 
     return fmt;
