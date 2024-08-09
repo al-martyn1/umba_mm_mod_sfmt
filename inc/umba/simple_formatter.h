@@ -695,7 +695,8 @@ public:
 
         bool bZero = false;
 
-        char numBuf[ 2 * format_utils::integral_max_bits / 3 ];
+        //char numBuf[ 2 * format_utils::integral_max_bits / 3 ];
+        char numBuf[ 64 ] = { 0 };
         char* pStrNum = (char*)getInfStr(isUpper);
         char* pStrNumCurPos = numBuf;
 
@@ -715,7 +716,8 @@ public:
 
             // 18 446 744 073 709 551 616 max uint64_t
             uint64_t fixedPointVal = (uint64_t)(((long double)val) * std::pow( 10.0L, prec+1 ));
-            uint8_t fixedPointDigits[ format_utils::integral_max_bits / 3 + 1 ];
+            //uint8_t fixedPointDigits[ format_utils::integral_max_bits / 3 + 1 ];
+            uint8_t fixedPointDigits[ 32 ];
             std::memset( (void*)fixedPointDigits, (int)0, sizeof(fixedPointDigits) );
 
             bZero = (fixedPointVal==0);
@@ -755,8 +757,11 @@ public:
             if (!(m_formatState.flags&fixed))
             {
                 // Отбрасываем незначащие нули
-                while( (fixedPointDigits[fractionPartBeginIdx]==0) && (fractionPartBeginIdx!=intPartBeginIdx) )
-                    fractionPartBeginIdx++;
+                // Не надо
+                //m_formatState.width
+                // if (m_formatState.precision)
+                // while( (fixedPointDigits[fractionPartBeginIdx]==0) && (fractionPartBeginIdx!=intPartBeginIdx) )
+                //     fractionPartBeginIdx++;
             }
 
             //bool hasVisibleFractionPart = true;
