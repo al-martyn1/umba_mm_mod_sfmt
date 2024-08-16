@@ -349,8 +349,8 @@ public:
         int         width     = 0; // width - auto
         int         precision = 3; // 3 digits after decimal point
         char        fill      = ' ';
-        char        decGroupSep = '`';
-        char        groupSep = '_';
+        char        decGroupSep = '\'';//'`';
+        char        groupSep = '\'';
         int         decGroupSize = 0;
         int         groupSize = 4;
         char        decimalPoint = '.';
