@@ -2197,7 +2197,7 @@ static const int caretMax       = 3;
 
 #if defined(UMBA_MCU_USED)
     #if defined(USE_UMBA_LOUT_COUT)
-        #error "USE_UMBA_LOUT_UART not supported for MCU"
+        #error "USE_UMBA_LOUT_COUT not supported for MCU"
     #endif
    
     #if defined(USE_UMBA_LOUT_CERR)
