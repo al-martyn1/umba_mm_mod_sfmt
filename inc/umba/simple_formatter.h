@@ -1194,13 +1194,13 @@ public:
         }
     
         virtual
-        bool isTerminal() override
+        bool isTerminal() const override
         {
             return m_pFormatter->m_charWriter->isTerminal();
         }
     
         virtual
-        bool isAnsiTerminal() override
+        bool isAnsiTerminal() const override
         {
             return m_pFormatter->m_charWriter->isAnsiTerminal();
         }
