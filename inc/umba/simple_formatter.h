@@ -163,7 +163,7 @@ size_t formatIntImpl(IntType val, BaseType base, bool uppercase, char *pBuf, int
 }
 
 
-}; // namespace format_utils
+} // namespace format_utils
 
 
 namespace formatter_utils

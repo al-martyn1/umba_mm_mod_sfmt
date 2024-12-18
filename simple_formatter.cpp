@@ -405,5 +405,5 @@ void SimpleFormatter::popLock()
     m_disableStack.pop();
 }
 
-}; // namespace umba
+} // namespace umba
 
