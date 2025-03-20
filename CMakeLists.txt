@@ -36,3 +36,4 @@ add_library(${PROJECT_NAME}::${PROJECT_NAME} ALIAS ${PROJECT_NAME})
 target_include_directories(${PROJECT_NAME} PUBLIC  ${MODULE_ROOT}/inc)
 target_include_directories(${PROJECT_NAME} PRIVATE ${MODULE_ROOT}/..)
 
+target_compile_definitions(${PROJECT_NAME} PRIVATE WIN32_LEAN_AND_MEAN)
