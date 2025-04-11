@@ -1031,10 +1031,19 @@ public:
     // Зело мешает
     // Нужно сделать конкретные реализации
     
-    #if 0
+    #if 1
 
-    template<typename T>
-    SimpleFormatter& operator<<( T t )
+    template< typename IntType
+            , typename std::enable_if< ( std::is_integral<IntType>::value
+                                     && !std::is_pointer<IntType>::value
+                                     && !std::is_same<IntType, char>::value
+                                     && !std::is_same<IntType, bool>::value
+                                       )
+                                     , bool
+                                     >::type = true
+            >
+
+    SimpleFormatter& operator<<( IntType t )
     {
         SimpleFormatterOutputSentry sentry(*this);
         formatValue(t);
@@ -1043,8 +1052,9 @@ public:
     
     #else
 
+    /*
     #define UMBA_SIMPLE_FORMATTER_IMPLEMENT_INSERTER_OPERATOR(typeName) \
-        SimpleFormatter& operator<<( typeName t )                       \
+        SimpleFormatter& operator<<( const typeName t )                 \
         {                                                               \
             SimpleFormatterOutputSentry sentry(*this);                  \
             formatValue(t);                                             \
@@ -1052,17 +1062,19 @@ public:
         }
 
     UMBA_SIMPLE_FORMATTER_IMPLEMENT_INSERTER_OPERATOR(char)
-    UMBA_SIMPLE_FORMATTER_IMPLEMENT_INSERTER_OPERATOR(signed char)
-    UMBA_SIMPLE_FORMATTER_IMPLEMENT_INSERTER_OPERATOR(unsigned char)
 
-    UMBA_SIMPLE_FORMATTER_IMPLEMENT_INSERTER_OPERATOR(short int)
-    UMBA_SIMPLE_FORMATTER_IMPLEMENT_INSERTER_OPERATOR(unsigned short int)
+    UMBA_SIMPLE_FORMATTER_IMPLEMENT_INSERTER_OPERATOR(std::int8_t)
+    UMBA_SIMPLE_FORMATTER_IMPLEMENT_INSERTER_OPERATOR(std::uint8_t)
 
-    UMBA_SIMPLE_FORMATTER_IMPLEMENT_INSERTER_OPERATOR(int)
-    UMBA_SIMPLE_FORMATTER_IMPLEMENT_INSERTER_OPERATOR(unsigned int)
+    UMBA_SIMPLE_FORMATTER_IMPLEMENT_INSERTER_OPERATOR(std::int16_t)
+    UMBA_SIMPLE_FORMATTER_IMPLEMENT_INSERTER_OPERATOR(std::uint16_t)
+
+    UMBA_SIMPLE_FORMATTER_IMPLEMENT_INSERTER_OPERATOR(std::int32_t)
+    UMBA_SIMPLE_FORMATTER_IMPLEMENT_INSERTER_OPERATOR(std::uint32_t)
 
     UMBA_SIMPLE_FORMATTER_IMPLEMENT_INSERTER_OPERATOR(std::int64_t)
     UMBA_SIMPLE_FORMATTER_IMPLEMENT_INSERTER_OPERATOR(std::uint64_t)
+    */
 
     #endif
 
