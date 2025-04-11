@@ -7,6 +7,7 @@
 #include <cmath>
 #include <cstring>
 #include <climits>
+#include <cstdint>
 #include "umba/stl.h"
 
 #include "umba/i_char_writer.h"
@@ -1030,7 +1031,7 @@ public:
     // Зело мешает
     // Нужно сделать конкретные реализации
     
-    #if 1
+    #if 0
 
     template<typename T>
     SimpleFormatter& operator<<( T t )
@@ -1060,6 +1061,9 @@ public:
     UMBA_SIMPLE_FORMATTER_IMPLEMENT_INSERTER_OPERATOR(int)
     UMBA_SIMPLE_FORMATTER_IMPLEMENT_INSERTER_OPERATOR(unsigned int)
 
+    UMBA_SIMPLE_FORMATTER_IMPLEMENT_INSERTER_OPERATOR(std::int64_t)
+    UMBA_SIMPLE_FORMATTER_IMPLEMENT_INSERTER_OPERATOR(std::uint64_t)
+
     #endif
 
 
@@ -1076,6 +1080,15 @@ public:
         formatValue((const char*)t);
         return *this;
     }
+
+    #if !defined(UMBA_MCU_USED)
+    SimpleFormatter& operator<<( const std::string &t )
+    {
+        SimpleFormatterOutputSentry sentry(*this);
+        formatValue(t);
+        return *this;
+    }
+    #endif
 
     //-------------------
     SimpleFormatter& operator<<( omanip::SimpleManip manip )
